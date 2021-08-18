@@ -1,0 +1,29 @@
+{
+  "name": "minute_taker",
+  "version": "1.0.0",
+  "description": "Allows users to take and distribute meeting notes in teams.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "server": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cody-callahan/minute_taker.git"
+  },
+  "author": "outOfThePark",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cody-callahan/minute_taker/issues"
+  },
+  "homepage": "https://github.com/cody-callahan/minute_taker#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "concurrently": "^6.2.1",
+    "express": "^4.17.1",
+    "mongoose": "^5.13.7"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  }
+}
