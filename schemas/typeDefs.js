@@ -49,8 +49,15 @@ const typeDefs = gql`
     }
 
     type Mutation {
-        login(email: String!, password: String!): Auth
-        addUser(username: String!, email: String!, password: String!): Auth
+        login( email: String!, password: String! ): Auth
+        addUser( username: String!, email: String!, password: String! ): Auth
+        addMeeting( title: String!, date: String! ): Meeting
+        addTeam( name: String! ): Team
+        addInvitee( inviteeId: ID!, meetingId: ID! ): User
+        addMember( memberId: ID!, teamID: ID ): User
+        addHost( hostId: ID!, meetingId: ID! ): User
+        addRecordKeeper( recordKeeperId: ID!, meetingId: ID! ): User
+        addAdmin( adminId: ID!, teamId: ID! ): User
     }
 `;
 // export the typeDefs
