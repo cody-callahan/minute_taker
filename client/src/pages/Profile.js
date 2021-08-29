@@ -1,5 +1,6 @@
 import React from 'react';
 import MeetingList from '../components/MeetingList';
+import MeetingForm from '../components/MeetingForm';
 import { useQuery } from '@apollo/client';
 import { QUERY_ME } from '../utils/queries';
 import Auth from '../utils/auth';
@@ -33,6 +34,14 @@ const Profile = () => {
         <h2 className="bg-dark text-secondary p-3 display-inline-block">
           My profile.
         </h2>
+      </div>
+
+      <div className="flex-row justify-space-between">
+        {loggedIn && (
+          <div className="col-12 mb-3">
+            <MeetingForm />
+          </div>
+        )}
       </div>
 
       <div className="flex-row justify-space-between mb-3">
