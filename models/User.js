@@ -25,7 +25,11 @@ const userSchema = new Schema(
         type: Schema.Types.ObjectId,
         ref: 'Meeting'
       }
-    ]
+    ],
+    team: {
+      type: Schema.Types.ObjectId,
+      ref: 'Team'
+    }
   },
   {
     toJSON: {

@@ -8,21 +8,108 @@ const resolvers = {
             if (context.user) {
               const userData = await User.findOne({ _id: context.user._id })
                 .select('-__v -password')
-                .populate('meetings');
-          
+                .populate('meetings')
+                .populate({
+                    path: 'team',
+                    model: 'Team',
+                    populate: {
+                      path: 'members',
+                      model: 'User'
+                    }
+                  });
+                
               return userData;
+            }
+            throw new AuthenticationError('Not logged in');
+        },
+        getMyMeeting: async (parent, { _id }, context) => {
+            if (context.user) {
+              const userData = await User.findOne({ _id: context.user._id })
+                .select('-__v -password')
+                .populate('meetings');
+                
+                const myMeetingArr = userData.meetings;
+                if(myMeetingArr.indexOf(_id) == -1){
+                    throw new AuthenticationError('Not invited to this meeting')
+                }
+
+                const meetingData = await Meeting.findById({ _id })
+                    .select('-__v' )
+                    .populate('invitees')
+                    .populate('host')
+                    .populate('recordKeeper');
+                
+                return meetingData;
+            }
+            throw new AuthenticationError('Not logged in');
+        },
+        getMyTeam: async (parent, { _id }, context) => {
+            if (context.user) {
+              const userData = await User.findOne({ _id: context.user._id })
+                .select('-__v -password')
+                .populate('team');
+                
+                if(userData.team._id != _id){
+                    throw new AuthenticationError('Not a member of this team')
+                }
+
+                const teamData = await Team.findById({ _id })
+                    .select('-__v' )
+                    .populate('members')
+                    .populate('admins');             
+                
+                return teamData;
+            }
+            throw new AuthenticationError('Not logged in');
+        },
+        getMyTeam: async (parent, { _id }, context) => {
+            if (context.user) {
+              const userData = await User.findOne({ _id: context.user._id })
+                .select('-__v -password')
+                .populate('team');
+                
+                if(userData.team._id != _id){
+                    throw new AuthenticationError('Not a member of this team')
+                }
+
+                const teamData = await Team.findById({ _id })
+                    .select('-__v' )
+                    .populate('members')
+                    .populate('admins');
+                
+                const teamAdminArr = teamData.admins;
+                if(teamAdminArray.indexOf(context.user._id) == -1){
+                    throw new AuthenticationError('Not an admin of this team.')
+                }
+                return teamData;
             }
             throw new AuthenticationError('Not logged in');
         },
         users: async () => {
             return User.find()
                 .select('-__v -password')
-                .populate('meetings');
+                .populate('meetings')
+                .populate({
+                    path: 'team',
+                    model: 'Team',
+                    populate: {
+                      path: 'members',
+                      model: 'User'
+                    }
+                });
         },
         user: async (parent, { username }) => {
             return User.findOne({ username :username })
                 .select('-__v -password')
-                .populate('meetings');
+                .populate('meetings')
+                .populate({
+                    path: 'team',
+                    model: 'Team',
+                    populate: {
+                      path: 'members',
+                      model: 'User'
+                    }
+                });
         },
         meetings: async () => {
             return Meeting.find()
@@ -52,6 +139,12 @@ const resolvers = {
         }
     },
     Mutation: {
+        addSeedUser: async (parent, { userId }) => {
+            const user = await User.findOne({ _id: userId });
+            const token = signToken(user);
+          
+            return { token, user };
+        },
         addUser: async (parent, args) => {
             const user = await User.create(args);
             const token = signToken(user);

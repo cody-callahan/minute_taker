@@ -2,6 +2,7 @@ const faker = require('faker');
 
 const db = require('../config/connection');
 const { User, Meeting, Team } = require('../models');
+const { gql } = require('apollo-server-express');
 
 db.once('open', async () => {
   await User.deleteMany({});
@@ -9,17 +10,31 @@ db.once('open', async () => {
   await Meeting.deleteMany({});
 
   // create user data
-  const userData = [];
+  const createdUsers = [];
 
   for (let i = 0; i < 100; i += 1) {
     const username = faker.internet.userName();
     const email = faker.internet.email(username);
-    const password = faker.internet.password();
+    const password = "123456" //faker.internet.password();
 
-    userData.push({ username, email, password });
+    const createdUser = await User.create({
+      username: username,
+      email: email,
+      password: password
+    });
+    gql`
+      mutation addSeedUser($userId: userId) {
+        addUser(userId: $userId) {
+          token
+          user {
+            _id
+            username
+          }
+        }
+      }
+    `;
+    createdUsers.push(createdUser);
   }
-
-  const createdUsers = await User.collection.insertMany(userData);
 
   const createdTeams = [];
 
@@ -32,27 +47,33 @@ db.once('open', async () => {
     });
   
     for(let j = 0; j < 9; j += 1) {
-      const { _id: userId } = createdUsers.ops[i];
+      const { _id: userId } = createdUsers[i];
       i++
       let memberId = userId;
       await Team.updateOne(
         { _id: createdTeam._id },
         { $push: { members: memberId} },
       );
-    }
-    for(let k = 0; k < 1; k+=1){
-      const { _id: userId } = createdUsers.ops[i];
-      i++
-      const updatedTeam = await Team.findByIdAndUpdate(
-        { _id: createdTeam._id },
-        { $push: { admins: userId, members: userId}
-        },
-        { new: true,
-          lean: true
-        }
+
+      await User.updateOne(
+        {_id: memberId },
+        { team: createdTeam._id }
       );
-      createdTeams.push(updatedTeam);
     }
+    const { _id: userId } = createdUsers[i];
+    await User.updateOne(
+      {_id: userId },
+      { team: createdTeam._id }
+    );
+    const updatedTeam = await Team.findByIdAndUpdate(
+      { _id: createdTeam._id },
+      { $push: { admins: userId, members: userId}
+      },
+      { new: true,
+        lean: true
+      }
+    );
+    createdTeams.push(updatedTeam);
   }
 
   var createdMeetings = [];
@@ -83,11 +104,10 @@ db.once('open', async () => {
     const { members: memberArr } = createdTeams[Math.floor(Math.random() * createdTeams.length)]
     for(let j= 0; j < numOfInvitees; j++)
     {
-      var inviteeIndex = Math.floor(Math.random() * memberArr.length);
-      inviteeId = memberArr[inviteeIndex];
+      inviteeId = memberArr[j];
       //Add meeting to users
       await User.updateOne(
-        { _id: memberArr[inviteeIndex] },
+        { _id: inviteeId },
         { $push: { meetings: createdMeeting._id }}
       );
       //Update meeting with invitees

@@ -9,6 +9,7 @@ const typeDefs = gql`
         email: String
         meetings: [Meeting]
         meetingCount: Int
+        team: Team
     }
 
     type Meeting{
@@ -27,7 +28,6 @@ const typeDefs = gql`
         _id: ID
         name: String
         createdAt: String
-        createdBy: User
         members: [User]
         admins: [User]
         memberCount: Int
@@ -40,6 +40,9 @@ const typeDefs = gql`
 
     type Query {
         me: User
+        getMyMeeting(_id: String!): Meeting,
+        getMyTeam(_id: String!): Team,
+        getMyAdminTeam(_id: String!): Team,
         users: [User]
         user(username: String!): User
         meetings: [Meeting]
@@ -50,6 +53,7 @@ const typeDefs = gql`
 
     type Mutation {
         login( email: String!, password: String! ): Auth
+        addSeedUser( userId: String! ): Auth
         addUser( username: String!, email: String!, password: String! ): Auth
         addMeeting( title: String!, date: String! ): Meeting
         addTeam( name: String! ): Team
