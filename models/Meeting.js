@@ -1,13 +1,13 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const { Schema, model } = require('mongoose');
+const dateFormat = require('../utils/dateFormat');
 
 //Create Schema
 const MeetingSchema = new Schema({
-    name: {
+    title: {
         type: String,
         required: true
     },
-    created: {
+    createdAt: {
         type: Date,
         default: Date.now,
         required: true
@@ -18,8 +18,27 @@ const MeetingSchema = new Schema({
         required: true
     },
     minutes: {
-        type: Object
-    }
+        type: String
+    },
+    host: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    recordKeeper: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    invitees: [ { type: Schema.Types.ObjectId, ref: 'User' } ], //Array of id values referencing meeting model
+},
+{
+  toJSON: { virtuals: true },
+  id: false
 });
 
-module.exports = Meeting = mongoose.model('meeting', MeetingSchema);
+MeetingSchema.virtual('inviteeCount').get(function() {
+    return this.invitees.length;
+});
+
+const Meeting = model('Meeting', MeetingSchema);
+
+module.exports = Meeting;

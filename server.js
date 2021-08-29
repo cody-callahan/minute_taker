@@ -1,23 +1,26 @@
 const express = require('express');
-const mongoose = require('mongoose');
+const { ApolloServer } = require('apollo-server-express');
+const { typeDefs, resolvers } = require('./schemas');
+const db = require('./config/connection');
 
-const meetings = require('./routes/api/meetings');
+const PORT = process.env.PORT || 3500;
 
-const app = express();
-app.use(express.json());
 
-//DB Config
-const db = require('./config/keys').mongoURI;
+async function startApolloServer(typeDefs, resolvers) {
+    const app = express();
+    app.use(express.urlencoded({ extended: false }));
+    app.use(express.json());
+    const server = new ApolloServer({ typeDefs, resolvers });
+    await server.start();
+    server.applyMiddleware({ app });
 
-//Connect to Mongo
-mongoose
-    .connect(db)
-    .then(() => console.log('MongoDB connnected'))
-    .catch(err => console.log(error));
+    db.once('open', () => {
+        app.listen(PORT, () => {
+          console.log(`API server running on port ${PORT}!`);
+          // log where we can go to test our GQL API
+          console.log(`Use GraphQL at http://localhost:${PORT}${server.graphqlPath}`);
+        });
+    });
+}
 
-//Use Routes
-app.use('/api/meetings', meetings)
-
-const port = process.env.PORT || 5000;
-
-app.listen(port, () => console.log(`Server started on port ${port}`));
+startApolloServer(typeDefs, resolvers);
