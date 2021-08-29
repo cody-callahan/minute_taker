@@ -10,11 +10,13 @@ const MeetingSchema = new Schema({
     createdAt: {
         type: Date,
         default: Date.now,
+        get: createdAtVal => dateFormat(createdAtVal),
         required: true
     },
     date: {
         type: Date,
         default: Date.now,
+        get: dateVal => dateFormat(dateVal),
         required: true
     },
     minutes: {

@@ -10,6 +10,7 @@ const TeamSchema = new Schema({
     createdAt: {
         type: Date,
         default: Date.now,
+        get: createdAtVal => dateFormat(createdAtVal),
         required: true
     },
     admins: [ { type: Schema.Types.ObjectId, ref: 'User' } ] ,
