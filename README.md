@@ -30,7 +30,7 @@ This app runs in the browser and features:
 
 Github Repo: https://github.com/cody-callahan/minute_taker
 
-Watchlist: https://
+Deployed Site: https://
 
 
 
