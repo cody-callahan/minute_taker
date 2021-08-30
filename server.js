@@ -6,19 +6,20 @@ const db = require('./config/connection');
 const { authMiddleware } = require('./utils/auth');
 
 const PORT = process.env.PORT || 3500;
+const app = express();
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
 
-async function startApolloServer(typeDefs, resolvers, middleware) {
-    const app = express();
-    app.use(express.urlencoded({ extended: false }));
-    app.use(express.json());
-    const server = new ApolloServer({ typeDefs, resolvers, context: middleware });
-    await server.start();
-    server.applyMiddleware({ app });
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/build/index.html'));
+});
 
-    app.get('*', (req, res) => {
-      res.sendFile(path.join(__dirname, '../client/build/index.html'));
-    });
+async function startApolloServer(typeDefs, resolvers, middleware){ 
+
+  const server = new ApolloServer({ typeDefs, resolvers, context: middleware });
+  await server.start();
+  server.applyMiddleware({ app });
 
     db.once('open', () => {
         app.listen(PORT, () => {
