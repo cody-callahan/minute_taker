@@ -9,7 +9,7 @@
     "client": "npm start --prefix client",
     "build": "cd client && npm run build",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "seed": "node seeders/seeds.js",
+    "seed": "node seeders/seeds.js"
   },
   "repository": {
     "type": "git",
