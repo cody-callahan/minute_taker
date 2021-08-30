@@ -4,7 +4,8 @@
   "description": "Allows users to take and distribute meeting notes in teams.",
   "main": "server.js",
   "engines": {
-    "node": "v16.7.0"
+    "node": "v16.7.0",
+    "npm": "7.20.3"
   },
    "scripts": {
     "start": "node server.js",
