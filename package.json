@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "description": "Allows users to take and distribute meeting notes in teams.",
   "main": "server.js",
-  "scripts": {
+  "engines": {
+    "node": "v16.7.0"
+  },
+   "scripts": {
     "start": "node server.js",
     "server": "nodemon server.js",
     "client": "npm start --prefix client",
