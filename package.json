@@ -4,13 +4,12 @@
   "description": "Allows users to take and distribute meeting notes in teams.",
   "main": "server.js",
   "scripts": {
-    "client-install": "npm install --prefix client",
     "start": "node server.js",
     "server": "nodemon server.js",
     "client": "npm start --prefix client",
+    "build": "cd client && npm run build",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "seed": "node seeders/seeds.js",
-    "watch": "nodemon server.js"
   },
   "repository": {
     "type": "git",
