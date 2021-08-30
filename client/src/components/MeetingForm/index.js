@@ -38,6 +38,7 @@ const MeetingForm = () => {
           title: '',
           date: ''
         });
+
       } catch (e) {
         console.error(e);
       }

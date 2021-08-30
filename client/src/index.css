@@ -34,6 +34,36 @@ body {
   background-color: #f3fffee1;
 }
 
+.input-li{
+  font-family: 'Inconsolata', monospace;
+  font-weight: 400;
+  line-height: 1.5;
+  font-size: 20px;
+}
+
+.input-p{
+  font-family: 'Inconsolata', monospace;
+  font-weight: 400;
+  line-height: 1.5;
+  font-size: 1.1rem;
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.input-h1{
+  font-family: 'Karla', sans-serif;
+  font-weight: 700;
+  margin: 5px 0;
+  line-height: 1.25;
+  font-size: 2.25rem;
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+ul{
+  margin-block-start: 0;
+}
+
 h1,
 h2,
 h3,
