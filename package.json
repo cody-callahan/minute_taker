@@ -1,43 +1,22 @@
 {
-  "name": "minute_taker",
-  "version": "1.0.0",
-  "description": "Allows users to take and distribute meeting notes in teams.",
-  "main": "server.js",
-  "engines": {
-    "node": "v16.7.0",
-    "npm": "7.20.3"
-  },
-   "scripts": {
-    "start": "node server.js",
-    "server": "nodemon server.js",
-    "client": "npm start --prefix client",
-    "build": "cd client && npm run build",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "seed": "node seeders/seeds.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/cody-callahan/minute_taker.git"
-  },
-  "author": "outOfThePark",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/cody-callahan/minute_taker/issues"
-  },
-  "homepage": "https://github.com/cody-callahan/minute_taker#readme",
-  "dependencies": {
-    "apollo-server-express": "^3.3.0",
-    "bcrypt": "^5.0.1",
-    "concurrently": "^6.2.1",
-    "express": "^4.17.1",
-    "express-graphql": "^0.12.0",
-    "faker": "^5.5.3",
-    "graphql": "^15.5.1",
-    "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.13.7",
-    "uuid": "^8.3.2"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.12"
+    "name": "minute_taker",
+    "version": "1.0.0",
+    "description": "",
+    "main": "server/server.js",
+    "scripts": {
+      "start": "node server/server.js",
+      "develop": "concurrently \"cd server && npm run watch\" \"cd client && npm start\"",
+      "install": "cd server && npm i && cd ../client && npm i",
+      "build": "cd client && npm run build"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+      "concurrently": "^5.1.0"
+    },
+    "dependencies": {
+      "@apollo/client": "^3.4.10"
+    }
   }
-}
+  
